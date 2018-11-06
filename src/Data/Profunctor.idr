@@ -266,7 +266,7 @@ interface Profunctor p => Choice (p : Type -> Type -> Type) where
   right' : p a b -> p (Either c a) (Either c b)
   right' = dimap mirror mirror . left'
 
-implementation Monad m => Choice (Kleislimorphism m) where
+implementation (Arrow (Kleislimorphism m), Monad m) => Choice (Kleislimorphism m) where
   left'  f = Kleisli $ either (applyKleisli $ f        >>> arrow Left)
                               (applyKleisli $ arrow id >>> arrow Right)
   right' f = Kleisli $ either (applyKleisli $ arrow id >>> arrow Left)
